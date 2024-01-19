@@ -386,7 +386,7 @@ export class CodeInputComponent implements AfterViewInit, OnInit, OnChanges, OnD
       return Promise.resolve(true);
     }
 
-    // process only key with placeholder keycode on android devices
+    // process only key with placeholder keycode on android devices or IOS with Chinese language
     if (!e.keyCode || e.keyCode !== 229) {
       return Promise.resolve(false);
     }
@@ -400,8 +400,12 @@ export class CodeInputComponent implements AfterViewInit, OnInit, OnChanges, OnD
         }
         // if backspace key pressed the caret will have position 0 (for single value field)
         resolve(input.selectionStart === 0 && !isReset);
-      });
+      }, this.isIOS() ? 100 : 0);
     });
+  }
+
+  private isIOS():boolean {
+    return /ipad|iphone|ipod/i.test(navigator.userAgent);
   }
 
   private isDeleteKey(e: any): boolean {
